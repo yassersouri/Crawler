@@ -1,0 +1,10 @@
+<Site>
+	<title>Mehrnews</title>
+	<url>http://mehrnews.ir/</url>
+	<savePath>/sites/mehrnews</savePath>
+</Site>
+<Site>
+	<title>Farsnews</title>
+	<url>http://farsnews.com/</url>
+	<savePath>/sites/farsnews</savePath>
+</Site>
