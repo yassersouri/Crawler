@@ -1,11 +1,9 @@
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Enumeration;
+import java.util.Date;
 import java.util.Vector;
 
 import org.htmlcleaner.CleanerProperties;
@@ -17,12 +15,13 @@ public class Mehrnews extends Site {
 	
 	String tableName= "mehrnews";
 	DataBase db;
+	Logger logger = new Logger();
 	String tableNameFields = "id, dateOfFetch";
 	Vector<URL> urls;
 	public Mehrnews(){
 		title = "Mehrnews";
 		url = "http://www.mehrnews.ir/txtNewsView_fa.aspx?t=News&Page=1";
-		savePath = "sites\\mehrnews\\";
+		savePath = "D:\\sites\\mehrnews\\";
 		db = new DataBase();
 		urls = new Vector<URL>(100);
 	}
@@ -50,7 +49,6 @@ public class Mehrnews extends Site {
 			if(classType != null && classType.equals(className)){
 				href = aElements[i].getAttributeByName("href");
 				href = "http://www.mehrnews.ir/" + href;
-				System.out.println(href);
 				urls.add(new URL(href));
 			}
 		}
@@ -65,45 +63,56 @@ public class Mehrnews extends Site {
 		String className = "news_body_print";
 		URL url;
 		
-		Enumeration<URL> links = urls.elements();
-		System.out.println(urls.size());
-		System.exit(1);
-		while(links.hasMoreElements()){
-			url = links.nextElement();
-			
-			String outputfile = savePath + url.toString().substring(45) + ".txt";
-			
-			FileOutputStream fos = new FileOutputStream(outputfile);
-			Writer out = new OutputStreamWriter(fos, "UTF8");
-			
-			CleanerProperties cp = new CleanerProperties();
-			cp.setRecognizeUnicodeChars(true);
-			HtmlCleaner cleaner = new HtmlCleaner(cp);
-			TagNode rootNode = cleaner.clean(url);
-			
-			TagNode spanElements[] = rootNode.getElementsByName("span", true);
-			String classType;
-			TagNode[] children;
-			StringBuffer sb;
-			for(int i = 0; spanElements != null && i < spanElements.length; i++){
-				classType = spanElements[i].getAttributeByName("class");
-				if(classType != null && classType.equals(className)){
-					children = spanElements[i].getChildTags();
-					for(int j = 0; j < children.length; j++){
-						sb = children[j].getText();
-						out.write(sb.toString());
-						System.out.println(sb.toString());
-					}
+		for(int k = 0; k < urls.size(); k++){
+			url = urls.elementAt(k);
 
+			String newsID = url.toString().substring(45);
+			newsID = "'" + newsID + "'";
+			if(!db.doesLinkExistsInDatabase(tableName, newsID)){
+				//save the page
+				String outputfile = savePath + url.toString().substring(45) + ".txt";
+				
+				FileOutputStream fos = new FileOutputStream(outputfile);
+				Writer out = new OutputStreamWriter(fos, "UTF8");
+				
+				CleanerProperties cp = new CleanerProperties();
+				cp.setRecognizeUnicodeChars(true);
+				HtmlCleaner cleaner = new HtmlCleaner(cp);
+				TagNode rootNode = cleaner.clean(url);
+				
+				TagNode spanElements[] = rootNode.getElementsByName("span", true);
+				String classType;
+				TagNode[] children;
+				StringBuffer sb;
+				for(int i = 0; spanElements != null && i < spanElements.length; i++){
+					classType = spanElements[i].getAttributeByName("class");
+					if(classType != null && classType.equals(className)){
+						children = spanElements[i].getChildTags();
+						for(int j = 0; j < children.length; j++){
+							sb = children[j].getText();
+							out.write(sb.toString());
+							//System.out.println(url.toString());
+						}
+					}
 				}
+				out.flush();
+				out.close();
+				fos.close();
+				Date currentTime = new Date(System.currentTimeMillis());
+				//newsID already has single quotation!
+				String insertValue = "" + newsID + ",'" + currentTime.toString() + "'";
+				//add link to database
+				db.insert(tableName, insertValue );
+				System.out.println(url.toString());
 			}
-			out.flush();
-			out.close();
-			fos.close();
+			else{
+				logger.LogRepetitive(url.toString());
+			}
 		}
+		urls.clear();
 	}
 
-	public Mehrnews createDataBase() throws ClassNotFoundException, SQLException{
+	public Mehrnews createTable() throws ClassNotFoundException, SQLException{
 		if(!db.tableExists(tableName)){
 			db.createTable(tableName, tableNameFields);
 		}	

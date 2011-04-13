@@ -1,9 +1,7 @@
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
@@ -38,11 +36,11 @@ public class Test {
     }
     
     public static void main(String[] args){
-    	DataBase db = new DataBase();
+    	//DataBase db = new DataBase();
+    	Mehrnews mn = new Mehrnews();
     	try {
-    		//db.dropTable("visited");
-    		Mehrnews mn = new Mehrnews();
-    		mn.getListPage(1);
+    		//mn.createTable();
+    		mn.getListPage(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
