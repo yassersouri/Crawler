@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -67,11 +69,10 @@ public class Main {
 		}
 		mn = new Mehrnews(defaultDBPath, defaultSavePath);
 		
-		
 		try {
 			if(!db.tableExists("mehrnews")){
 				mn.createTable();
-			}
+			}			
 			for(int i = 2923; i > 0; i--){
 				try {
 					mn.getListPage(i);

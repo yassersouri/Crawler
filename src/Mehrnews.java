@@ -68,7 +68,7 @@ public class Mehrnews extends Site {
 		return result;
 	}
 	
-	private void getPagesInVector(int id) throws Exception {
+	public void getPagesInVector(int id) throws Exception {
 		if(urls.isEmpty()){
 			logger.logEmptyListPage(id);
 			throw new Exception("no links are in vector. Page ID: " + id);
@@ -83,7 +83,7 @@ public class Mehrnews extends Site {
 		urls.clear();
 	}
 
-	private void getURL(URL url, int id) throws Exception{
+	public void getURL(URL url, int id) throws Exception{
 		String className = "news_body_print";
 		String newsID = url.toString().substring(45);
 		newsID = "'" + newsID + "'";
@@ -101,16 +101,12 @@ public class Mehrnews extends Site {
 			
 			TagNode spanElements[] = rootNode.getElementsByName("span", true);
 			String classType;
-			TagNode[] children;
 			StringBuffer sb;
 			for(int i = 0; spanElements != null && i < spanElements.length; i++){
 				classType = spanElements[i].getAttributeByName("class");
 				if(classType != null && classType.equals(className)){
-					children = spanElements[i].getChildTags();
-					for(int j = 0; j < children.length; j++){
-						sb = children[j].getText();
-						out.write(sb.toString());
-					}
+					sb = spanElements[i].getText();
+					out.write(sb.toString());
 				}
 			}
 			out.flush();
