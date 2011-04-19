@@ -2,9 +2,9 @@ import java.sql.*;
 
 
 public class DataBase {
-	String fileName = "D:\\crawler.db";
-	
-	public DataBase(){ 
+	String fileName;
+	public DataBase(String fileName){
+		this.fileName = fileName;
 	}
 	
 	public DataBase dropTable(String tableName) throws ClassNotFoundException, SQLException{

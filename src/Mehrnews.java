@@ -18,11 +18,16 @@ public class Mehrnews extends Site {
 	Logger logger = new Logger();
 	String tableNameFields = "id, dateOfFetch";
 	Vector<URL> urls;
-	public Mehrnews(){
+	public Mehrnews(String dbFilePath, String savePath){
 		title = "Mehrnews";
 		url = "http://www.mehrnews.ir/txtNewsView_fa.aspx?t=News&Page=1";
-		savePath = "D:\\sites\\mehrnews\\";
-		db = new DataBase();
+		if(savePath != null){
+			this.savePath = savePath;
+		}
+		else{
+			this.savePath = "D:\\sites\\mehrnews\\";
+		}
+		db = new DataBase(dbFilePath);
 		urls = new Vector<URL>(100);
 	}
 	
