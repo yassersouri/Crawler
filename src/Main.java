@@ -121,8 +121,8 @@ public class Main extends TimerTask {
 		Date current = null;
 		Calendar cal = null;
 		try {
-			one = parser.parse("00:00"); //because of DST --> it really is 01:00
-			six = parser.parse("05:00"); //because of DST --> it really is 06:00
+			one = parser.parse("01:00"); //because of DST --> it really is 01:00
+			six = parser.parse("06:00"); //because of DST --> it really is 06:00
 			cal = Calendar.getInstance();
 			current = parser.parse(parser.format(cal.getTime()));//be careful: DST
 		} catch (ParseException e) {
