@@ -1,12 +1,13 @@
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 public class Main {
-	static String defaultDBPath = "D:\\crawler.db";
-	static String defaultSavePath = "D:\\sites\\mehrnews\\";
+	static String defaultDBPath = "D:\\crawler\\crawler.db";
+	static String defaultSavePath = "D:\\crawler\\sites\\mehrnews";
 	
 	public static void main(String[] args){
 		//***********************
@@ -26,10 +27,21 @@ public class Main {
 			defaultDBPath = f.getPath();
 		}
 		else{
-			String dbDefaultMessage = "You Did not specify any path for the db file. So we assume that it is located in: " + defaultDBPath;
+			String dbDefaultMessage = "You Did not specify any path for the db file. So we assume that it is located in: " + defaultDBPath + "\n we are going to try to create that file for you if it does not exists!";
 			JOptionPane.showMessageDialog(null, dbDefaultMessage, "Notice", JOptionPane.WARNING_MESSAGE);
+			
+			//create the file if it does not exists
+			String dir = defaultDBPath.substring(0,defaultDBPath.lastIndexOf('\\'));
+			File tempDir = new File(dir);
+			tempDir.mkdirs();
+			try {
+				new File(defaultDBPath).createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		db = new DataBase(defaultDBPath);
+		
 		
 		//***********************
 		//  Save File Path
@@ -46,18 +58,21 @@ public class Main {
 			defaultSavePath = d.getPath();
 		}
 		else{
-			String savePathDefaultMessage = "You Did not specify any saving path. So we assume that the saving path is: " + defaultSavePath;
+			String savePathDefaultMessage = "You Did not specify any saving path. So we assume that the saving path is: " + defaultSavePath + "\n we are going to try to create that directory for you if it does not exists!";
 			JOptionPane.showMessageDialog(null, savePathDefaultMessage, "Notice", JOptionPane.WARNING_MESSAGE);
+			//create the path if it does not exists
+			String dir = defaultSavePath + "\\";
+			File tempDir = new File(dir);
+			tempDir.mkdirs();
 		}
 		mn = new Mehrnews(defaultDBPath, defaultSavePath);
 		
-		System.exit(0);
 		
 		try {
 			if(!db.tableExists("mehrnews")){
 				mn.createTable();
 			}
-			for(int i = 2917; i > 0; i--){
+			for(int i = 2923; i > 0; i--){
 				try {
 					mn.getListPage(i);
 				} catch (Exception e) {
