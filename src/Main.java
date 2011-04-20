@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Timer;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -111,7 +110,7 @@ public class Main extends TimerTask {
 		Main main = new Main();
 		Timer timer = new Timer();
 		long delay = 0;
-		long period = 1000*30; //every 30 seconds
+		long period = 1000*120; //every 120 seconds // 2 minutes
 		
 		//the run
 		try {
