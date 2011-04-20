@@ -111,7 +111,7 @@ public class Main extends TimerTask {
 		Main main = new Main();
 		Timer timer = new Timer();
 		long delay = 0;
-		long period = 1000*5;
+		long period = 1000*30; //every 30 seconds
 		
 		//the run
 		try {

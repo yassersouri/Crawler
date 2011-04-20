@@ -17,7 +17,7 @@ public class Mehrnews extends Site {
 		title = "Mehrnews";
 		url = "http://www.mehrnews.ir/txtNewsView_fa.aspx?t=News&Page=1";
 		if(savePath != null){
-			this.savePath = savePath + "\\sites\\mehrnews";
+			this.savePath = savePath + "\\sites\\mehrnews\\";
 			//generating logs save path based on current save path
 			String logsSavePath = this.savePath.substring(0, this.savePath.lastIndexOf('\\'));
 			logsSavePath = logsSavePath.substring(0, logsSavePath.lastIndexOf('\\') + 1);
