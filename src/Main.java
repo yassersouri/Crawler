@@ -12,7 +12,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Main extends TimerTask {
 	static String defaultDBPath = "D:\\crawler\\crawler.db";
-	static String defaultSavePath = "D:\\crawler\\sites\\mehrnews";
+	static String defaultSavePath = "D:\\crawler";
 	static int currentPageID = 2930;
 	static Mehrnews mn;
 	static String startTime = "01:00";
@@ -101,11 +101,10 @@ public class Main extends TimerTask {
 		else{
 			String savePathDefaultMessage = "You Did not specify any saving path. So we assume that the saving path is: " + defaultSavePath + "\n we are going to try to create that directory for you if it does not exists!";
 			JOptionPane.showMessageDialog(null, savePathDefaultMessage, "Notice", JOptionPane.WARNING_MESSAGE);
-			//create the path if it does not exists
-			String dir = defaultSavePath + "\\";
-			File tempDir = new File(dir);
-			tempDir.mkdirs();
 		}
+		String dir = defaultSavePath + "\\sites\\mehrnews";
+		File tempDir = new File(dir);
+		tempDir.mkdirs();
 		mn = new Mehrnews(defaultDBPath, defaultSavePath);
 		
 		//Scheduler

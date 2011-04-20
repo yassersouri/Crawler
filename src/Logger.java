@@ -11,6 +11,10 @@ public class Logger {
 	public Logger(String savePath){
 			if(savePath != null){
 				this.savePath = savePath;
+				repetitiveLogFile = savePath + "repetitive.txt";
+				emptyListPageLogFile = savePath + "emptylist.txt";
+				timeNotMatchLogFile = savePath + "notontime.txt";
+				goodRunLogFile = savePath + "goodRun.txt";
 			}
 			//create the save path if it does not exist
 			File temp = new File(this.savePath);
@@ -31,7 +35,7 @@ public class Logger {
 	}
 	
 	public void logTimeNotMatch(String log) throws IOException{
-		FileWriter fw = new FileWriter(new File(emptyListPageLogFile), true);
+		FileWriter fw = new FileWriter(new File(timeNotMatchLogFile), true);
 		fw.write(log + "\n");
 		fw.flush();
 		fw.close();

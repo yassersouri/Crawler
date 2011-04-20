@@ -10,18 +10,18 @@ public class Mehrnews extends Site {
 	
 	String tableName= "mehrnews";
 	DataBase db;
-	Logger logger = new Logger(null);
+	Logger logger;
 	String tableNameFields = "id, dateOfFetch";
 	Vector<URL> urls;
 	public Mehrnews(String dbFilePath, String savePath){
 		title = "Mehrnews";
 		url = "http://www.mehrnews.ir/txtNewsView_fa.aspx?t=News&Page=1";
 		if(savePath != null){
-			this.savePath = savePath + '\\';
-			//generating logs save path based on current savepath
+			this.savePath = savePath + "\\sites\\mehrnews";
+			//generating logs save path based on current save path
 			String logsSavePath = this.savePath.substring(0, this.savePath.lastIndexOf('\\'));
-			logsSavePath = logsSavePath.substring(0, logsSavePath.lastIndexOf('\\'));
 			logsSavePath = logsSavePath.substring(0, logsSavePath.lastIndexOf('\\') + 1);
+			//logsSavePath = logsSavePath.substring(0, logsSavePath.lastIndexOf('\\') + 1);
 			logger = new Logger(logsSavePath + "logs\\");
 		}
 		else{
