@@ -15,8 +15,42 @@ public class Main extends TimerTask {
 	static String defaultSavePath = "D:\\crawler\\sites\\mehrnews";
 	static int currentPageID = 2930;
 	static Mehrnews mn;
+	static String startTime = "01:00";
+	static String finishTime = "06:00";
+	
 	
 	public static void main(String[] args){
+		if(args.length == 2){
+			if(args[0].length() != 5 || args[1].length() != 5){
+				System.out.println("Wrong Arguments");
+				System.out.println("Correct arguments must be like: \"java -jar crawler.jar 01:00 06:00\"");
+				System.exit(1);
+			}
+			else{
+				SimpleDateFormat parser = new SimpleDateFormat("HH:mm");
+				try {
+					@SuppressWarnings("unused")
+					Date temp = parser.parse(args[0]);
+					temp = parser.parse(args[1]);
+					startTime = args[0];
+					finishTime = args[1];
+				} catch (ParseException e) {
+					System.out.println("Wrong Arguments");
+					System.out.println("Correct arguments must be like: \"java -jar crawler.jar 01:00 06:00\"");
+					System.exit(1);
+				}
+				
+			}
+		}
+		else if(args.length > 0){
+			System.out.println("Wrong Arguments");
+			System.out.println("Correct arguments must be like: \"java -jar crawler.jar 01:00 06:00\"");
+			System.exit(1);
+		}
+		
+		
+		
+		
 		//***********************
 		//  DataBase File Path
 		//***********************
@@ -96,9 +130,11 @@ public class Main extends TimerTask {
 	@Override
 	public void run() {
 		if(currentPageID > 0){
+			Date currentTime = new Date(System.currentTimeMillis());
 			if(timeIsOK()){
 				//do one page fetch
 				try {
+					mn.getLogger().logGoodRun("Run Time: " + currentTime.toString() + "Page ID: " + currentPageID);
 					mn.getListPage(currentPageID);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -106,8 +142,16 @@ public class Main extends TimerTask {
 				//decreasing the <<currentPageID>>
 				currentPageID--;
 			}
+			else{
+				try {
+					mn.getLogger().logTimeNotMatch("Run Time: " + currentTime.toString());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		else{
+			JOptionPane.showMessageDialog(null, "Crawler finished work!", "Finished", JOptionPane.INFORMATION_MESSAGE);
 			System.out.println("Crawler finished work!");
 			System.exit(0);
 		}
@@ -121,8 +165,8 @@ public class Main extends TimerTask {
 		Date current = null;
 		Calendar cal = null;
 		try {
-			one = parser.parse("01:00"); //because of DST --> it really is 01:00
-			six = parser.parse("06:00"); //because of DST --> it really is 06:00
+			one = parser.parse(startTime); 
+			six = parser.parse(finishTime); 
 			cal = Calendar.getInstance();
 			current = parser.parse(parser.format(cal.getTime()));//be careful: DST
 		} catch (ParseException e) {

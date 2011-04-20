@@ -113,7 +113,7 @@ public class Mehrnews extends Site {
 			System.out.println("Saved URL --> " + url.toString());
 		}
 		else{
-			logger.LogRepetitive(url.toString() + " page id: " + id);
+			logger.logRepetitive(url.toString() + " page id: " + id);
 			System.out.println("Repetitive URL --> " + url.toString());
 		}
 	}
@@ -123,5 +123,9 @@ public class Mehrnews extends Site {
 			db.createTable(tableName, tableNameFields);
 		}	
 		return this;
+	}
+	
+	public Logger getLogger(){
+		return logger;
 	}
 }
