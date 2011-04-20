@@ -133,7 +133,7 @@ public class Main extends TimerTask {
 			if(timeIsOK()){
 				//do one page fetch
 				try {
-					mn.getLogger().logGoodRun("Run Time: " + currentTime.toString() + "Page ID: " + currentPageID);
+					mn.getLogger().logGoodRun("Run Time: " + currentTime.toString() + "----> Page ID: " + currentPageID);
 					mn.getListPage(currentPageID);
 				} catch (Exception e) {
 					e.printStackTrace();
