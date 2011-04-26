@@ -40,7 +40,7 @@ public class DataBase {
 		return this;
 	}
 	//fields is a string containing sorted attributes of the raw that will be inserted
-	//e.g: "'http://asldfkjasdflasdj.com', '29 june 2323 alkjdf'" without the double quotes, with single quotes
+	//e.g: "'http://asldfkjasdflasdj.com', '29 june 2323 alkjdf'" without the double quotes, !with single quotes
 	public DataBase insert(String tableName, String fields) throws ClassNotFoundException, SQLException{
 		Class.forName("org.sqlite.JDBC");
         Connection conn = DriverManager.getConnection("jdbc:sqlite:" + fileName);
@@ -64,5 +64,28 @@ public class DataBase {
         stat.close();
         conn.close();
 		return result;
+	}
+	
+	public String getlastTry_Field(String tableName, String fieldName)throws ClassNotFoundException, SQLException{
+		String result = "";
+		Class.forName("org.sqlite.JDBC");
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:" + fileName);
+        Statement stat = conn.createStatement();
+        
+        ResultSet rs = stat.executeQuery("SELECT " + fieldName + " FROM " + tableName + ";");
+        if(rs.isClosed()){
+        	return null;
+        }
+		result = rs.getString(fieldName);
+		return result;
+	}
+	
+	public void emptyTable(String tableName)throws ClassNotFoundException, SQLException{
+		Class.forName("org.sqlite.JDBC");
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:" + fileName);
+        Statement stat = conn.createStatement();
+        
+        stat.execute("DELETE FROM " + tableName + ";");
+		
 	}
 }

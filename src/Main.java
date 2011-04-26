@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -12,10 +13,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class Main extends TimerTask {
 	static String defaultDBPath = "D:\\crawler\\crawler.db";
 	static String defaultSavePath = "D:\\crawler";
-	static int currentPageID = 2930;
+	static int currentPageID = 2900;
 	static Mehrnews mn;
 	static String startTime = "01:00";
 	static String finishTime = "06:00";
+	static String lastTryTableName = "lastTry";
+	static String lastTryTableFields = "ID, date";
+	static String lastTryTableDateFieldName = "date";
+	static String lastTryTableIDFieldName = "ID";
+	static String lastTryDateFormat = "yyyy.MM.dd";
 	
 	
 	public static void main(String[] args){
@@ -46,8 +52,6 @@ public class Main extends TimerTask {
 			System.out.println("Correct arguments must be like: \"java -jar crawler.jar 01:00 06:00\"");
 			System.exit(1);
 		}
-		
-		
 		
 		
 		//***********************
@@ -104,6 +108,56 @@ public class Main extends TimerTask {
 		String dir = defaultSavePath + "\\sites\\mehrnews";
 		File tempDir = new File(dir);
 		tempDir.mkdirs();
+		
+		//*****************************************
+		//   Detect the first list page to visit
+		//*****************************************
+				
+		try {
+			//if the table does not exist create it
+			if(!db.tableExists(lastTryTableName)){
+				db.createTable(lastTryTableName, lastTryTableFields);
+			}
+			
+			//query the table to get the latest date
+			String then_date = db.getlastTry_Field(lastTryTableName, lastTryTableDateFieldName);
+			String then_id = db.getlastTry_Field(lastTryTableName, lastTryTableIDFieldName);
+			
+			//	--> fist run skip to end
+			//  |
+			//	\-> try to estimate the time that has passed from that time. and change 
+			//			currentPageID accordingly
+			if(then_date != null){
+				//there is value in database
+				
+				DateFormat formatter = new SimpleDateFormat(lastTryDateFormat);
+				Date then = formatter.parse(then_date);
+				Date now = Calendar.getInstance().getTime();
+				
+				//calculate the amount of time that has passed
+				int days = (int) (now.getTime() - then.getTime())/ (24*60*60*1000); //days in between now and then
+				if(days < 365){
+					//if more than one year start again
+					//means do not change anything
+						//else change date accordingly
+					currentPageID = Integer.parseInt(then_id);
+					currentPageID += (days + 1); //add the number of days that have passed from that day to the pageID
+				}
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
 		mn = new Mehrnews(defaultDBPath, defaultSavePath);
 		
 		//Scheduler
@@ -134,6 +188,14 @@ public class Main extends TimerTask {
 				try {
 					mn.getLogger().logGoodRun("Run Time: " + currentTime.toString() + "----> Page ID: " + currentPageID);
 					mn.getListPage(currentPageID);
+					
+					mn.getDataBase().emptyTable(lastTryTableName);//only one element in this table
+					
+					SimpleDateFormat parser = new SimpleDateFormat(lastTryDateFormat);
+					String now = parser.format(Calendar.getInstance().getTime());
+					
+					String insertFields = "'" + currentPageID + "', '" + now + "'";
+					mn.getDataBase().insert(lastTryTableName, insertFields);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
