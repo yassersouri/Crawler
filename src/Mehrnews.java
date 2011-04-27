@@ -102,7 +102,6 @@ public class Mehrnews extends Site {
 					out.write(sb.toString());
 				}
 			}
-			out.flush();
 			out.close();
 			fos.close();
 			Date currentTime = new Date(System.currentTimeMillis());
