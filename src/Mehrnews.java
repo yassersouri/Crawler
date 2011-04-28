@@ -128,4 +128,8 @@ public class Mehrnews extends Site {
 	public Logger getLogger(){
 		return logger;
 	}
+	
+	public DataBase getDataBase(){
+		return db;
+	}
 }
