@@ -5,7 +5,6 @@ While doing so we saw that the output generated contains characters like `&nbsp;
 
 Usage
 ======
-
 Using the crawler
 -----------------
 You can either compile from source or use the built in jar file in [jar directory](https://github.com/yassersouri/Crawler/tree/master/jar).
@@ -20,5 +19,4 @@ For our own reasons we wanted the crawler to only download news articles from ["
 By running the above command when in Crawler\jar directory, you can run the crawler. Notice that the first argument is the _start time_ and the second is the _finish time_. Also both of them are optional. After running the crawler, it will prompt you to choose your database file and saving path. You can press `esc` and use the default pathes.(mentioned above)
 
 ##dependencies
-==============
 The only dependency is Java JDK 1.6. Other libraries are included.
