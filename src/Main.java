@@ -22,6 +22,7 @@ public class Main extends TimerTask {
 	static String lastTryTableDateFieldName = "date";
 	static String lastTryTableIDFieldName = "ID";
 	static String lastTryDateFormat = "yyyy.MM.dd";
+	private static boolean isdefault = false;
 	
 	
 	public static void main(String[] args){
@@ -32,19 +33,13 @@ public class Main extends TimerTask {
 				System.exit(1);
 			}
 			else{
-				SimpleDateFormat parser = new SimpleDateFormat("HH:mm");
-				try {
-					@SuppressWarnings("unused")
-					Date temp = parser.parse(args[0]);
-					temp = parser.parse(args[1]);
-					startTime = args[0];
-					finishTime = args[1];
-				} catch (ParseException e) {
-					System.out.println("Wrong Arguments");
-					System.out.println("Correct arguments must be like: \"java -jar crawler.jar 01:00 06:00\"");
-					System.exit(1);
-				}
-				
+				startTime = args[0];
+				finishTime = args[1];
+			}
+		}
+		else if(args.length == 1){
+			if(args[0].equals("-NO")){
+				isdefault = true;
 			}
 		}
 		else if(args.length > 0){
@@ -53,62 +48,63 @@ public class Main extends TimerTask {
 			System.exit(1);
 		}
 		
-		
-		//***********************
-		//  DataBase File Path
-		//***********************
-		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle("Select your database file");
-		FileNameExtensionFilter ff = new FileNameExtensionFilter("*.db", "db");
-		fc.setFileFilter(ff);
-		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fc.setVisible(true);
-		fc.showOpenDialog(null);
-		File f = fc.getSelectedFile();
-		
-		DataBase db;
-		if(f != null){
-			defaultDBPath = f.getPath();
-		}
-		else{
-			String dbDefaultMessage = "You Did not specify any path for the db file. So we assume that it is located in: " + defaultDBPath + "\n we are going to try to create that file for you if it does not exists!";
-			JOptionPane.showMessageDialog(null, dbDefaultMessage, "Notice", JOptionPane.WARNING_MESSAGE);
+		DataBase db = null;
+		if(!isdefault){
+			//***********************
+			//  DataBase File Path
+			//***********************
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle("Select your database file");
+			FileNameExtensionFilter ff = new FileNameExtensionFilter("*.db", "db");
+			fc.setFileFilter(ff);
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fc.setVisible(true);
+			fc.showOpenDialog(null);
+			File f = fc.getSelectedFile();
 			
-			//create the file if it does not exists
-			String dir = defaultDBPath.substring(0,defaultDBPath.lastIndexOf('\\'));
+			
+			if(f != null){
+				defaultDBPath = f.getPath();
+			}
+			else{
+				String dbDefaultMessage = "You Did not specify any path for the db file. So we assume that it is located in: " + defaultDBPath + "\n we are going to try to create that file for you if it does not exists!";
+				JOptionPane.showMessageDialog(null, dbDefaultMessage, "Notice", JOptionPane.WARNING_MESSAGE);
+				
+				//create the file if it does not exists
+				String dir = defaultDBPath.substring(0,defaultDBPath.lastIndexOf('\\'));
+				File tempDir = new File(dir);
+				tempDir.mkdirs();
+				try {
+					new File(defaultDBPath).createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			//***********************
+			//  Save File Path
+			//***********************
+			JFileChooser dc = new JFileChooser();
+			dc.setDialogTitle("Select your saving path");
+			dc.setAcceptAllFileFilterUsed(false);
+			dc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			dc.showOpenDialog(null);
+			File d = dc.getSelectedFile();
+			
+			
+			if(d != null){
+				defaultSavePath = d.getPath();
+			}
+			else{
+				String savePathDefaultMessage = "You Did not specify any saving path. So we assume that the saving path is: " + defaultSavePath + "\n we are going to try to create that directory for you if it does not exists!";
+				JOptionPane.showMessageDialog(null, savePathDefaultMessage, "Notice", JOptionPane.WARNING_MESSAGE);
+			}
+			String dir = defaultSavePath + "\\sites\\mehrnews";
 			File tempDir = new File(dir);
 			tempDir.mkdirs();
-			try {
-				new File(defaultDBPath).createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
+		
 		db = new DataBase(defaultDBPath);
-		
-		
-		//***********************
-		//  Save File Path
-		//***********************
-		JFileChooser dc = new JFileChooser();
-		dc.setDialogTitle("Select your saving path");
-		dc.setAcceptAllFileFilterUsed(false);
-		dc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		dc.showOpenDialog(null);
-		File d = dc.getSelectedFile();
-		
-		
-		if(d != null){
-			defaultSavePath = d.getPath();
-		}
-		else{
-			String savePathDefaultMessage = "You Did not specify any saving path. So we assume that the saving path is: " + defaultSavePath + "\n we are going to try to create that directory for you if it does not exists!";
-			JOptionPane.showMessageDialog(null, savePathDefaultMessage, "Notice", JOptionPane.WARNING_MESSAGE);
-		}
-		String dir = defaultSavePath + "\\sites\\mehrnews";
-		File tempDir = new File(dir);
-		tempDir.mkdirs();
-		
 		//*****************************************
 		//   Detect the first list page to visit
 		//*****************************************
@@ -218,6 +214,8 @@ public class Main extends TimerTask {
 	}
 
 	private boolean timeIsOK() {
+		if(true) return true;
+		
 		SimpleDateFormat parser = new SimpleDateFormat("HH:mm");
 		SimpleDateFormat parser2 = new SimpleDateFormat("HH:mm:ss");
 		Date one = null;
