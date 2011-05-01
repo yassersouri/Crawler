@@ -18,5 +18,5 @@ For our own reasons we wanted the crawler to only download news articles from ["
 	java -jar crawler.jar 01:00 06:00
 By running the above command when in Crawler\jar directory, you can run the crawler. Notice that the first argument is the _start time_ and the second is the _finish time_. Also both of them are optional. After running the crawler, it will prompt you to choose your database file and saving path. You can press `esc` and use the default pathes.(mentioned above)
 
-##dependencies
+##Dependencies
 The only dependency is Java JDK 1.6. Other libraries are included.
