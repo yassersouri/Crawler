@@ -11,6 +11,7 @@ public class HTMLCharacterHelper {
 		content = IOUtils.toString(fis, "UTF8");
 		fis.close();
 		content = content.replaceAll("&nbsp;", " ");
+		content = content.replaceAll("&lrm;", "‌");
 		content = content.replaceAll("&zwnj;", "‌");
 		content = content.replaceAll("&quot;", "\"");
 		FileOutputStream fos = new FileOutputStream(file);
