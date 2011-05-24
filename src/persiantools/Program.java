@@ -3,23 +3,25 @@ package persiantools;
 import static persiantools.HTMLCharacterHelper.*;
 import java.io.*;
 
-public class Test {
+public class Program {
 	public static void main(String args[]){
 		removeAll();
 	}
 	
 	
 	public static void removeAll(){
-		File dir = new File("D:\\crawler\\sites\\mehrnews\\");
+		File dir = new File("D:\\sample\\");
 		File[] allFiles = dir.listFiles();
 		
 		for(int i = 0; i < allFiles.length; i++){
-			try {
-				removeAll_NBSP_ZWNJ_QUOT(allFiles[i]);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if(allFiles[i].isFile()){
+				try {
+					removeAll_NBSP_ZWNJ_QUOT(allFiles[i]);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				System.out.println("Done file: " + allFiles[i].toString());
 			}
-			System.out.println("Done file: " + allFiles[i].toString());
 		}
 	}
 }
