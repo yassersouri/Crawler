@@ -14,8 +14,14 @@ public class HTMLCharacterHelper {
 		content = content.replaceAll("&rlm;", "‌");
 		content = content.replaceAll("&zwnj;", "‌");
 		content = content.replaceAll("&quot;", "\"");
+		content = content.replaceAll("&rdquo;", "«");
+		content = content.replaceAll("&ldquo;", "»");
 		FileOutputStream fos = new FileOutputStream(file);
 		IOUtils.write(content, fos, "UTF8");
 		fos.close();
 	}
 }
+ /*
+&rdquo; --> «
+&ldquo; --> »
+*/
