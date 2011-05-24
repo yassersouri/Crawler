@@ -14,12 +14,14 @@ public class Program {
 		File[] allFiles = dir.listFiles();
 		
 		for(int i = 0; i < allFiles.length; i++){
-			try {
-				removeAll_NBSP_ZWNJ_QUOT(allFiles[i]);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if(allFiles[i].isFile()){
+				try {
+					removeAll_NBSP_ZWNJ_QUOT(allFiles[i]);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				System.out.println("Done file: " + allFiles[i].toString());
 			}
-			System.out.println("Done file: " + allFiles[i].toString());
 		}
 	}
 }

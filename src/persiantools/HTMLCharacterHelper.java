@@ -12,6 +12,7 @@ public class HTMLCharacterHelper {
 		fis.close();
 		content = content.replaceAll("&nbsp;", " ");
 		content = content.replaceAll("&rlm;", "‌");
+		content = content.replaceAll("&shy;", "‌");
 		content = content.replaceAll("&zwnj;", "‌");
 		content = content.replaceAll("&quot;", "\"");
 		content = content.replaceAll("&rdquo;", "«");
