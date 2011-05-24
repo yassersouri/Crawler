@@ -218,7 +218,11 @@ public class Main extends TimerTask {
 	}
 
 	private boolean timeIsOK() {
+		//temporary solution for disabling timing features!
 		if(true) return true;
+		@SuppressWarnings("unused")
+		//if you want to re enable it just remove the upper two lines.
+		
 		SimpleDateFormat parser = new SimpleDateFormat("HH:mm");
 		SimpleDateFormat parser2 = new SimpleDateFormat("HH:mm:ss");
 		Date one = null;
